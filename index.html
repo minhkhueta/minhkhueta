@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minh Khue Ta</title>
+<meta name="description" content="Minh Khue Ta — personal site.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAF9F5;
+    --ink: #14161A;
+    --ink-dim: rgba(20,22,26,0.48);
+    --accent: #2547FF;
+    --track: rgba(20,22,26,0.18);
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  }
+
+  [data-theme="dark"] {
+    --bg: #0B0B0C;
+    --ink: #F4F3EF;
+    --ink-dim: rgba(244,243,239,0.48);
+    --accent: #7C93FF;
+    --track: rgba(244,243,239,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.55;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  ::selection { background: #0B0B0C; color: #FFFFFF; }
+  [data-theme="dark"] ::selection { background: #FFFFFF; color: #2547FF; }
+
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 4.5rem 6vw 6rem;
+  }
+
+  /* ---------- Custom cursor (desktop, mouse only) ---------- */
+  .cursor-ring {
+    position: fixed;
+    top: 0; left: 0;
+    width: 24px; height: 24px;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.2s ease, height 0.2s ease;
+    mix-blend-mode: difference;
+    z-index: 9999;
+  }
+  .cursor-ring.grow { width: 42px; height: 42px; }
+
+  /* ---------- Header ---------- */
+  header.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 5rem;
+  }
+
+  header.top h1 {
+    font-size: clamp(1.9rem, 3.4vw, 2.5rem);
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  header.top .hello {
+    font-size: 1.35rem;
+    font-weight: 400;
+    margin-top: 0.2rem;
+    color: var(--accent);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  /* iOS-style toggle */
+  .switch {
+    position: relative;
+    width: 46px;
+    height: 26px;
+    border-radius: 999px;
+    background: var(--track);
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 0.4rem;
+  }
+
+  .switch .knob {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--ink);
+    transition: transform 0.25s ease;
+  }
+
+  .switch[aria-pressed="true"] { background: var(--accent); }
+  .switch[aria-pressed="true"] .knob { transform: translateX(20px); background: var(--bg); }
+
+  /* ---------- Layout ---------- */
+  .layout {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .contact-col {
+    position: sticky;
+    top: 2.5rem;
+  }
+
+  @media (max-width: 760px) {
+    .layout { grid-template-columns: 1fr; gap: 2.5rem; }
+    .contact-col { position: static; }
+  }
+
+  h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    color: var(--ink);
+  }
+
+  h3 {
+    font-size: 0.92rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    color: var(--ink);
+  }
+
+  section.block { margin-bottom: 2.8rem; }
+  section.block:last-child { margin-bottom: 0; }
+
+  .about-text {
+    font-size: 0.98rem;
+    color: var(--ink);
+    max-width: 52ch;
+  }
+
+  .item-list span,
+  .item-list a,
+  .job .meta,
+  .job .desc div {
+    display: block;
+    font-size: 0.95rem;
+    padding: 0.18rem 0;
+    color: var(--ink-dim);
+    transition: color 0.2s ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .item-list span:hover,
+    .item-list a:hover,
+    .job .meta:hover,
+    .job .desc div:hover {
+      color: var(--accent);
+    }
+  }
+
+  @media (hover: none), (pointer: coarse) {
+    .item-list span,
+    .item-list a,
+    .job .meta,
+    .job .desc div {
+      color: var(--ink);
+    }
+  }
+
+  .skill-group { margin-bottom: 1.3rem; }
+  .skill-group:last-child { margin-bottom: 0; }
+
+  .job { margin-bottom: 1.4rem; }
+  .job:last-child { margin-bottom: 0; }
+  .job .desc { margin-top: 0.3rem; }
+
+  /* ---------- Colophon ---------- */
+  .colophon-mark {
+    margin-top: 1rem;
+    padding-top: 1.2rem;
+    border-top: 1px dashed var(--ink-dim);
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.01em;
+    color: var(--ink-dim);
+  }
+
+  .colophon-mark .ai { color: var(--accent); }
+  .colophon-mark div { padding: 0.15rem 0; }
+</style>
+</head>
+<body>
+
+<div class="cursor-ring" id="cursorRing"></div>
+
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <h1>Minh Khue Ta</h1>
+      <div class="hello" id="helloWord">Hello</div>
+    </div>
+    <button class="switch" id="themeToggle" aria-pressed="true" aria-label="Toggle dark or bright mode">
+      <span class="knob"></span>
+    </button>
+  </header>
+
+  <div class="layout">
+
+    <div class="contact-col">
+      <section class="block">
+        <h2>Contact</h2>
+        <div class="item-list">
+          <a href="mailto:you@example.com">Email ↗</a>
+          <a href="https://linkedin.com/in/yourname" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </section>
+    </div>
+
+    <div class="main-col">
+
+      <section class="block" id="about">
+        <h2>About</h2>
+        <p class="about-text">I work in equity research and financial modeling, and spend the rest of my time on design, coffee, and the piano.</p>
+      </section>
+
+      <section class="block" id="experience">
+        <h2>Experience</h2>
+        <!-- EDIT: replace with your real role -->
+        <div class="job">
+          <div class="meta">Equity Analyst — [Company Name]</div>
+          <div class="meta">[Start] — [End or Present], [City]</div>
+          <div class="desc">
+            <div>[One or two sentences on what the role covered.]</div>
+            <div>[A concrete result or contribution.]</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block" id="skills">
+        <h2>Skills</h2>
+
+        <div class="skill-group">
+          <h3>Professionals</h3>
+          <div class="item-list">
+            <span>Financial Modelling</span>
+            <span>Equity Research</span>
+            <span>Slide Deck Design</span>
+            <span>Problem Solving</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <h3>Self-learn</h3>
+          <div class="item-list">
+            <span>Figma</span>
+            <span>SQL</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <h3>Hobbies</h3>
+          <div class="item-list">
+            <span>Piano</span>
+            <span>Coffee Brewing</span>
+            <span>Photography</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="block" id="education">
+        <h2>Education</h2>
+        <div class="item-list">
+          <span>University of Economics Ho Chi Minh City (UEH)</span>
+        </div>
+      </section>
+
+      <section class="block" id="pursuits">
+        <h2>Pursuits</h2>
+        <div class="item-list">
+          <span>French</span>
+          <span>Japanese</span>
+          <span>Chinese</span>
+          <span>Cooking</span>
+          <span>Architecture</span>
+          <span>Music Production</span>
+          <span>Design</span>
+          <span>Photography</span>
+        </div>
+      </section>
+
+      <section class="block" id="writing">
+        <h2>Writing</h2>
+        <div class="item-list">
+          <!-- EDIT: replace with real article titles + links -->
+          <a href="#">[Title] ↗</a>
+          <a href="#">[Title] ↗</a>
+          <a href="#">[Title] ↗</a>
+          <a href="#">[Title] ↗</a>
+        </div>
+      </section>
+
+      <section class="block" id="colophon">
+        <div class="colophon-mark">
+          <div>crafted with <span class="ai">artificial intelligence</span></div>
+          <div>minhkhueta, 2026</div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  /* Theme toggle */
+  const toggle = document.getElementById('themeToggle');
+  const root = document.documentElement;
+
+  function applyTheme(theme) {
+    root.setAttribute('data-theme', theme);
+    toggle.setAttribute('aria-pressed', theme === 'dark');
+  }
+
+  let saved = 'dark';
+  try { saved = localStorage.getItem('site-theme') || 'dark'; } catch (e) {}
+  applyTheme(saved);
+
+  toggle.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    try { localStorage.setItem('site-theme', next); } catch (e) {}
+  });
+
+  /* Hello cycling */
+  const words = ['Hello', 'Bonjour', 'Hallo', 'Xin chào', 'こんにちは', '你好'];
+  const helloEl = document.getElementById('helloWord');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduceMotion) {
+    let idx = 0;
+    setInterval(() => {
+      helloEl.style.opacity = 0;
+      setTimeout(() => {
+        idx = (idx + 1) % words.length;
+        helloEl.textContent = words[idx];
+        helloEl.style.opacity = 1;
+      }, 280);
+    }, 3000);
+  }
+
+  /* Custom cursor — desktop with real mouse only */
+  const cursorRing = document.getElementById('cursorRing');
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  if (canHover) {
+    document.body.style.cursor = 'none';
+    window.addEventListener('mousemove', (e) => {
+      cursorRing.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+    });
+    document.querySelectorAll('a, .item-list span, .switch').forEach((el) => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('grow'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('grow'));
+    });
+  } else {
+    cursorRing.remove();
+  }
+</script>
+
+</body>
+</html>
